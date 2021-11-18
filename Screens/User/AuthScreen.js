@@ -14,6 +14,7 @@ import CustomButton from '../../Components/UI/CustomButton';
 import CustomTextInput from '../../Components/UI/CustomTextInput';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import Dimensions from '../../Constants/Dimensions';
+//import PhoneInput from "react-native-phone-number-input";
 
 const AuthScreen = props => {
   const windowWidth = Dimensions.width;

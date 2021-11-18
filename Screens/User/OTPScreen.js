@@ -7,14 +7,14 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import OTPInputView from '@twotalltotems/react-native-otp-input';
 import CountDown from 'react-native-countdown-component';
 
-const OTPScreen = props => {
+const OTPScreen = (props) => {
   const [resendCode, setResendCode] = useState(false);
   const [attempts, setAttempts] = useState(3);
   const [otpError, setOtpError] = useState(false);
   const windowWidth = Dimensions.width;
   const windowHeight = Dimensions.height;
 
-  const phoneNumber = props.navigation.getParam('phone');
+  const phoneNumber = props.route.params.phone;
 
   const resendCodeHandler = () => {
     ToastAndroid.showWithGravity(
