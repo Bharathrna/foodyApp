@@ -1,4 +1,4 @@
-import React, {useState, useCallback} from 'react';
+import React, {useState, useCallback, useRef} from 'react';
 import {
   View,
   Text,
@@ -14,14 +14,14 @@ import CustomButton from '../../Components/UI/CustomButton';
 import CustomTextInput from '../../Components/UI/CustomTextInput';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import Dimensions from '../../Constants/Dimensions';
-//import PhoneInput from "react-native-phone-number-input";
+import PhoneInput from "react-native-phone-number-input";
 
 const AuthScreen = props => {
   const windowWidth = Dimensions.width;
   const windowHeight = Dimensions.height;
 
-  const [phoneNumber, setPhoneNumber] = useState(null);
-  const [showIcon, setShowIcon] = useState(false);
+  const [phoneNumber, setPhoneNumber] = useState("");
+  const phoneInput = useRef(null);
 
   const textChangeHandler = useCallback(
     text => {
@@ -51,12 +51,12 @@ const AuthScreen = props => {
           </TouchableOpacity>
           <View
             style={{
-              ...styles.phoneNumberContainer,
+              flex: 1,
               marginTop: windowHeight * 0.51,
               marginLeft: moderateScale(20),
-              justifyContent: 'center',
+              marginRight: moderateScale(25)
             }}>
-            <TextInput
+            {/* <TextInput
               value={phoneNumber}
               selectionColor="orange"
               placeholder="Phone Number"
@@ -65,7 +65,62 @@ const AuthScreen = props => {
               style={styles.phoneTextInput}
               maxLength={10}
               onChangeText={textChangeHandler.bind(this)}
-            />
+              
+            /> */}
+            <Icon
+            name="cancel"
+            size={20}
+            color="black"
+            style={{
+              flex: 1,
+              flexDirection: 'row',
+              justifyContent: 'center',
+              alignItems: 'flex-end',
+              // position: 'absolute',
+              // top: windowHeight * 0.66 - moderateScale(150),
+              // bottom: 0,
+              // left: windowWidth * 0.85,
+              // right: 0,
+            }}
+            onPress={() => {}}
+          />
+             <PhoneInput
+            ref={phoneInput}
+            value={phoneNumber}
+            placeholder="Phone Number"
+            defaultCode="IN"
+            layout="first"
+            onChangeText={(text) => {
+              textChangeHandler(text);
+              console.log("Text entered: ", text);
+            }}
+            // onChangeFormattedText={(text) => {
+            //   //setFormattedValue(text);
+            //   setPhoneNumber(text);
+            //   console.log("Formatted Text entered: ", text);
+            // }}
+            containerStyle = {styles.phoneNumberContainer}
+            textContainerStyle = {styles.phoneTextContainer}
+            textInputProps = {{
+              maxLength: 15,
+                        
+              // style: {
+              //   fontFamily: 'AtkinsonHyperlegible-Bold',
+              //  // fontSize: moderateScale(15),
+              //  // color: 'black'
+              //},
+            }}
+            textInputStyle = {{
+             fontSize: moderateScale(15),
+             fontFamily: 'AtkinsonHyperlegible-Bold',
+            }}
+            codeTextStyle = {{ 
+             fontFamily: 'AtkinsonHyperlegible-Bold',
+             fontSize: moderateScale(15)
+            }}
+            withShadow
+            //autoFocus
+          />
           </View>
           <View
             style={{
@@ -203,7 +258,7 @@ const AuthScreen = props => {
             }}
             source={require('../../assets/images/google.png')}
           />
-          <Image
+          {/* <Image
             style={{
               width: '8%',
               height: '50%',
@@ -215,21 +270,8 @@ const AuthScreen = props => {
               right: 0,
             }}
             source={require('../../assets/images/indianflag.png')}
-          />
-          <Icon
-            name="cancel"
-            size={20}
-            color="black"
-            style={{
-              position: 'absolute',
-              top: windowHeight * 0.66 - moderateScale(96),
-              bottom: 0,
-              left: windowWidth * 0.85,
-              right: 0,
-            }}
-            onPress={() => {}}
-          />
-          <View
+          /> */}
+          {/* <View
             style={{
               position: 'absolute',
               top: windowHeight * 0.53,
@@ -244,7 +286,7 @@ const AuthScreen = props => {
               }}>
               +91
             </Text>
-          </View>
+          </View> */}
         </ImageBackground>
       </ScrollView>
     </View>
@@ -291,11 +333,17 @@ const styles = ScaledSheet.create({
   },
 
   phoneNumberContainer: {
-    flex: 1,
-    width: '88%',
-    height: '48@ms',
+    width: '100%',
     backgroundColor: 'white',
     borderRadius: '5@ms',
+  },
+
+  phoneTextContainer: {
+    borderTopRightRadius: moderateScale(5), 
+    borderBottomRightRadius: moderateScale(5),
+    backgroundColor: 'white',
+    paddingLeft: '0@ms',
+    paddingVertical: '2@ms'
   },
 
   otpButtonText: {
@@ -319,7 +367,7 @@ const styles = ScaledSheet.create({
     fontSize: '15@ms',
   },
 
-  skipText: {
+ skipText: {
     fontFamily: 'AtkinsonHyperlegible-Bold',
     textAlign: 'center',
     paddingTop: '2@ms',
