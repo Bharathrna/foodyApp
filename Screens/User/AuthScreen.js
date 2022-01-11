@@ -4,7 +4,7 @@ import {
   Text,
   Image,
   ImageBackground,
-  TextInput,
+  ToastAndroid,
   TouchableOpacity,
   ScrollView,
 } from 'react-native';
@@ -21,14 +21,13 @@ const AuthScreen = props => {
   const windowHeight = Dimensions.height;
 
   const [phoneNumber, setPhoneNumber] = useState("");
+  const [valid, setValid] = useState(false);
   const phoneInput = useRef(null);
 
-  const textChangeHandler = useCallback(
-    text => {
+  const textChangeHandler = text => {
+      console.log("Im txt handler", text);
       setPhoneNumber(text);
-    },
-    [setPhoneNumber],
-  );
+  };
 
   return (
     <View style={styles.container}>
@@ -52,38 +51,16 @@ const AuthScreen = props => {
           <View
             style={{
               flex: 1,
-              marginTop: windowHeight * 0.51,
-              marginLeft: moderateScale(20),
-              marginRight: moderateScale(25)
-            }}>
-            {/* <TextInput
-              value={phoneNumber}
-              selectionColor="orange"
-              placeholder="Phone Number"
-              placeholderTextColor="grey"
-              keyboardType="phone-pad"
-              style={styles.phoneTextInput}
-              maxLength={10}
-              onChangeText={textChangeHandler.bind(this)}
-              
-            /> */}
-            <Icon
-            name="cancel"
-            size={20}
-            color="black"
-            style={{
-              flex: 1,
               flexDirection: 'row',
               justifyContent: 'center',
-              alignItems: 'flex-end',
-              // position: 'absolute',
-              // top: windowHeight * 0.66 - moderateScale(150),
-              // bottom: 0,
-              // left: windowWidth * 0.85,
-              // right: 0,
-            }}
-            onPress={() => {}}
-          />
+              alignItems: 'center',
+              marginTop: windowHeight * 0.51,
+              marginLeft: moderateScale(20),
+              marginRight: moderateScale(25),
+              backgroundColor: 'black',
+              padding: moderateScale(2),
+              borderRadius: moderateScale(5)
+            }}>
              <PhoneInput
             ref={phoneInput}
             value={phoneNumber}
@@ -121,6 +98,16 @@ const AuthScreen = props => {
             withShadow
             //autoFocus
           />
+            <Icon
+              name="cancel"
+              size={20}
+              color="white"
+              style={{
+                paddingLeft: moderateScale(10),
+                paddingRight: moderateScale(8)
+              }}
+              onPress={() => textChangeHandler("")}
+            />
           </View>
           <View
             style={{
@@ -131,9 +118,24 @@ const AuthScreen = props => {
             <CustomButton
               style={{backgroundColor: 'black', width: '93%'}}
               textStyle={styles.otpButtonText}
-              onPress={() => props.navigation.navigate('OTP', {
-                phone: phoneNumber
-              })}>
+              onPress={() => {
+                const checkValid = phoneInput.current?.isValidNumber(phoneNumber);
+                const countryCode = phoneInput.current?.getCallingCode();
+                console.log("Validity: ", checkValid, countryCode, phoneNumber);
+                setValid(checkValid ? checkValid : false);
+                if(valid) {
+                  props.navigation.navigate('OTP', {
+                    phone: phoneNumber,
+                    code: countryCode
+                  })
+                } else {
+                  ToastAndroid.showWithGravity(
+                    'Enter a valid number',
+                    ToastAndroid.LONG,
+                    ToastAndroid.BOTTOM,
+                  );
+                }
+              }}>
               Send OTP
             </CustomButton>
           </View>
@@ -225,7 +227,7 @@ const AuthScreen = props => {
               height: '50%',
               resizeMode: 'contain',
               position: 'absolute',
-              top: windowHeight * 0.6 + moderateScale(11),
+              top: windowHeight * 0.6 + moderateScale(15),
               bottom: 0,
               left: windowWidth * 0.1,
               right: 0,
@@ -238,7 +240,7 @@ const AuthScreen = props => {
               height: '50%',
               resizeMode: 'contain',
               position: 'absolute',
-              top: windowHeight * 0.5 + moderateScale(140),
+              top: windowHeight * 0.5 + moderateScale(145),
               bottom: 0,
               left: windowWidth * 0.1,
               right: 0,
@@ -251,42 +253,13 @@ const AuthScreen = props => {
               height: '50%',
               resizeMode: 'contain',
               position: 'absolute',
-              top: windowHeight * 0.5 + moderateScale(140),
+              top: windowHeight * 0.5 + moderateScale(145),
               bottom: 0,
               left: windowWidth * 0.55,
               right: 0,
             }}
             source={require('../../assets/images/google.png')}
           />
-          {/* <Image
-            style={{
-              width: '8%',
-              height: '50%',
-              resizeMode: 'contain',
-              position: 'absolute',
-              top: windowHeight * 0.5 - moderateScale(99),
-              bottom: 0,
-              left: windowWidth * 0.1,
-              right: 0,
-            }}
-            source={require('../../assets/images/indianflag.png')}
-          /> */}
-          {/* <View
-            style={{
-              position: 'absolute',
-              top: windowHeight * 0.53,
-              bottom: 0,
-              left: windowWidth * 0.2,
-              right: 0,
-            }}>
-            <Text
-              style={{
-                fontFamily: 'AtkinsonHyperlegible-Bold',
-                fontSize: moderateScale(14),
-              }}>
-              +91
-            </Text>
-          </View> */}
         </ImageBackground>
       </ScrollView>
     </View>
@@ -333,14 +306,14 @@ const styles = ScaledSheet.create({
   },
 
   phoneNumberContainer: {
-    width: '100%',
-    backgroundColor: 'white',
+   // width: '200%',
     borderRadius: '5@ms',
+    alignItems: 'center',
+    flex: 1,
+    backgroundColor: 'white',
   },
 
   phoneTextContainer: {
-    borderTopRightRadius: moderateScale(5), 
-    borderBottomRightRadius: moderateScale(5),
     backgroundColor: 'white',
     paddingLeft: '0@ms',
     paddingVertical: '2@ms'

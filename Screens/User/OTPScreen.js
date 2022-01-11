@@ -15,6 +15,9 @@ const OTPScreen = (props) => {
   const windowHeight = Dimensions.height;
 
   const phoneNumber = props.route.params.phone;
+  const countryCode = props.route.params.code;
+
+  console.log("Country code: ", phoneNumber, countryCode);
 
   const resendCodeHandler = () => {
     ToastAndroid.showWithGravity(
@@ -82,7 +85,7 @@ const OTPScreen = (props) => {
             fontSize: moderateScale(14),
             marginTop: moderateScale(5),
           }}>
-          +91-{phoneNumber}
+          {countryCode === undefined ? phoneNumber : <Text>+{countryCode}-{phoneNumber}</Text>}
         </Text>
       </View>
       <View
