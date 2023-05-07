@@ -21,7 +21,7 @@ const AuthScreen = props => {
   const windowHeight = Dimensions.height;
 
   const [phoneNumber, setPhoneNumber] = useState("");
-  const [valid, setValid] = useState(false);
+//  const [valid, setValid] = useState(false);
   const phoneInput = useRef(null);
 
   const textChangeHandler = text => {
@@ -119,22 +119,22 @@ const AuthScreen = props => {
               style={{backgroundColor: 'black', width: '93%'}}
               textStyle={styles.otpButtonText}
               onPress={() => {
-                const checkValid = phoneInput.current?.isValidNumber(phoneNumber);
+                // const checkValid = phoneInput.current?.isValidNumber(phoneNumber);
                 const countryCode = phoneInput.current?.getCallingCode();
-                console.log("Validity: ", checkValid, countryCode, phoneNumber);
-                setValid(checkValid ? checkValid : false);
-                if(valid) {
+                //console.log("Validity: ", checkValid, countryCode, phoneNumber);
+                //setValid(checkValid ? checkValid : false);
+               // if(valid) {
                   props.navigation.navigate('OTP', {
                     phone: phoneNumber,
                     code: countryCode
                   })
-                } else {
-                  ToastAndroid.showWithGravity(
-                    'Enter a valid number',
-                    ToastAndroid.LONG,
-                    ToastAndroid.BOTTOM,
-                  );
-                }
+                // } else {
+                //   ToastAndroid.showWithGravity(
+                //     'Enter a valid number',
+                //     ToastAndroid.LONG,
+                //     ToastAndroid.BOTTOM,
+                //   );
+                //}
               }}>
               Send OTP
             </CustomButton>
